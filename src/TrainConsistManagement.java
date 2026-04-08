@@ -1,52 +1,52 @@
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class TrainConsistManagement {
 
-    // Static inner class Bogie
-    static class Bogie {
-        private String name;
-        private int capacity;
+    public static class Bogie {
+        String type;
+        int capacity;
 
-        public Bogie(String name, int capacity) {
-            this.name = name;
+        public Bogie(String type, int capacity) {
+            this.type = type;
             this.capacity = capacity;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public int getCapacity() {
-            return capacity;
         }
 
         @Override
         public String toString() {
-            return name + " -> " + capacity;
+            return type + " -> " + capacity;
         }
     }
 
-    public static void main(String[] args) {
-        System.out.println("UC7 - Sort Bogies by Capacity (Comparator)");
-
+    public List<Bogie> createBogies() {
         List<Bogie> bogies = new ArrayList<>();
         bogies.add(new Bogie("First Class", 24));
         bogies.add(new Bogie("Sleeper", 72));
         bogies.add(new Bogie("AC Chair", 56));
+        bogies.add(new Bogie("Executive", 80));
+        return bogies;
+    }
 
-        System.out.println("Before Sorting:");
-        for (Bogie b : bogies) {
-            System.out.println(b);
-        }
+    public List<Bogie> filterHighCapacityBogies(List<Bogie> bogies, int threshold) {
+        return bogies.stream()
+                .filter(b -> b.capacity > threshold)
+                .collect(Collectors.toList());
+    }
 
-        // Sort bogies by capacity
-        bogies.sort(Comparator.comparingInt(Bogie::getCapacity));
+     static void main(String[] args) {
+        TrainConsistManagement tcm = new TrainConsistManagement();
+        List<Bogie> bogies = tcm.createBogies();
 
-        System.out.println("\nAfter Sorting by Capacity:");
-        for (Bogie b : bogies) {
-            System.out.println(b);
-        }
+        System.out.println("UC8 - Filter Passenger Boogies Using Streams");
+        System.out.println("----------------------------------------------");
+        System.out.println("All Bogies:");
+        bogies.forEach(System.out::println);
 
-        System.out.println("\nUC7 bogie sorting completed");
+        int threshold = 60;
+        List<Bogie> filtered = tcm.filterHighCapacityBogies(bogies, threshold);
+        System.out.println("\nFiltered Bogies (capacity > " + threshold + "):");
+        filtered.forEach(System.out::println);
     }
 }

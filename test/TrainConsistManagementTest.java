@@ -1,54 +1,54 @@
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
+import java.util.List;
+import java.util.ArrayList;
 
 public class TrainConsistManagementTest {
 
     TrainConsistManagement tcm = new TrainConsistManagement();
 
+    // --- UC12: Safety Compliance Check Tests ---
+
     @Test
-    void testRegex_ValidTrainID() {
-        assertTrue(tcm.isValidTrainID("TRN-1234"));
+    void testSafetyCompliant_AllValidCylindricalPetroleum() {
+        List<TrainConsistManagement.GoodsBogie> bogies = List.of(
+                new TrainConsistManagement.GoodsBogie("Cylindrical", "Petroleum"),
+                new TrainConsistManagement.GoodsBogie("Rectangular", "Coal")
+        );
+        assertTrue(tcm.isTrainSafetyCompliant(bogies));
     }
 
     @Test
-    void testRegex_InvalidTrainIDFormat() {
-        assertFalse(tcm.isValidTrainID("TRAIN12"));
-        assertFalse(tcm.isValidTrainID("TRN12A"));
-        assertFalse(tcm.isValidTrainID("1234-TRN"));
+    void testSafetyNonCompliant_InvalidCylindricalCargo() {
+        List<TrainConsistManagement.GoodsBogie> bogies = List.of(
+                new TrainConsistManagement.GoodsBogie("Cylindrical", "Coal"),
+                new TrainConsistManagement.GoodsBogie("Rectangular", "Grain")
+        );
+        assertFalse(tcm.isTrainSafetyCompliant(bogies));
     }
 
     @Test
-    void testRegex_ValidCargoCode() {
-        assertTrue(tcm.isValidCargoCode("PET-AB"));
+    void testSafetyCompliant_EmptyBogieList() {
+        List<TrainConsistManagement.GoodsBogie> bogies = new ArrayList<>();
+        assertTrue(tcm.isTrainSafetyCompliant(bogies), "Empty list should be compliant by default");
     }
 
     @Test
-    void testRegex_InvalidCargoCodeFormat() {
-        assertFalse(tcm.isValidCargoCode("PET-ab"));
-        assertFalse(tcm.isValidCargoCode("PET123"));
-        assertFalse(tcm.isValidCargoCode("AB-PET"));
+    void testSafetyCompliant_MixedValidBogieTypes() {
+        List<TrainConsistManagement.GoodsBogie> bogies = List.of(
+                new TrainConsistManagement.GoodsBogie("Cylindrical", "Petroleum"),
+                new TrainConsistManagement.GoodsBogie("Rectangular", "Coal"),
+                new TrainConsistManagement.GoodsBogie("Flatbed", "Steel")
+        );
+        assertTrue(tcm.isTrainSafetyCompliant(bogies));
     }
 
     @Test
-    void testRegex_TrainIDDigitLengthValidation() {
-        assertFalse(tcm.isValidTrainID("TRN-123"));   // too short
-        assertFalse(tcm.isValidTrainID("TRN-12345")); // too long
-    }
-
-    @Test
-    void testRegex_CargoCodeUppercaseValidation() {
-        assertFalse(tcm.isValidCargoCode("PET-aa")); // lowercase not allowed
-    }
-
-    @Test
-    void testRegex_EmptyInputHandling() {
-        assertFalse(tcm.isValidTrainID(""));
-        assertFalse(tcm.isValidCargoCode(""));
-    }
-
-    @Test
-    void testRegex_ExactPatternMatch() {
-        assertFalse(tcm.isValidTrainID("TRN-1234X")); // extra characters
-        assertFalse(tcm.isValidCargoCode("PET-ABC")); // extra characters
+    void testSafetyNonCompliant_MultipleInvalidCylindricalBogies() {
+        List<TrainConsistManagement.GoodsBogie> bogies = List.of(
+                new TrainConsistManagement.GoodsBogie("Cylindrical", "Grain"),
+                new TrainConsistManagement.GoodsBogie("Cylindrical", "Coal")
+        );
+        assertFalse(tcm.isTrainSafetyCompliant(bogies));
     }
 }

@@ -3,7 +3,6 @@ import java.util.ArrayList;
 
 public class TrainConsistManagement {
 
-    // --- UC16: Bubble Sort for Passenger Bogie Capacities ---
     public static void bubbleSortCapacities(int[] capacities) {
         int n = capacities.length;
         for (int i = 0; i < n - 1; i++) {

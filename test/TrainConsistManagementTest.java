@@ -1,52 +1,54 @@
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 public class TrainConsistManagementTest {
 
-    @Test
-    void testReduce_TotalSeatCalculation() {
-        TrainConsistManagement tcm = new TrainConsistManagement();
-        List<TrainConsistManagement.Bogie> bogies = tcm.createBogies();
-        int total = tcm.totalSeats(bogies);
+    TrainConsistManagement tcm = new TrainConsistManagement();
 
-        assertEquals(24 + 72 + 56 + 80 + 60, total);
+    @Test
+    void testRegex_ValidTrainID() {
+        assertTrue(tcm.isValidTrainID("TRN-1234"));
     }
 
     @Test
-    void testReduce_MultipleBogiesAggregation() {
-        TrainConsistManagement tcm = new TrainConsistManagement();
-        List<TrainConsistManagement.Bogie> bogies = tcm.createBogies();
-        int total = tcm.totalSeats(bogies);
-
-        assertTrue(total > 0);
+    void testRegex_InvalidTrainIDFormat() {
+        assertFalse(tcm.isValidTrainID("TRAIN12"));
+        assertFalse(tcm.isValidTrainID("TRN12A"));
+        assertFalse(tcm.isValidTrainID("1234-TRN"));
     }
 
     @Test
-    void testReduce_SingleBogieCapacity() {
-        TrainConsistManagement tcm = new TrainConsistManagement();
-        List<TrainConsistManagement.Bogie> bogies = List.of(new TrainConsistManagement.Bogie("Single", 50));
-        int total = tcm.totalSeats(bogies);
-
-        assertEquals(50, total);
+    void testRegex_ValidCargoCode() {
+        assertTrue(tcm.isValidCargoCode("PET-AB"));
     }
 
     @Test
-    void testReduce_EmptyBogieList() {
-        TrainConsistManagement tcm = new TrainConsistManagement();
-        int total = tcm.totalSeats(List.of());
-
-        assertEquals(0, total);
+    void testRegex_InvalidCargoCodeFormat() {
+        assertFalse(tcm.isValidCargoCode("PET-ab"));
+        assertFalse(tcm.isValidCargoCode("PET123"));
+        assertFalse(tcm.isValidCargoCode("AB-PET"));
     }
 
     @Test
-    void testReduce_OriginalListUnchanged() {
-        TrainConsistManagement tcm = new TrainConsistManagement();
-        List<TrainConsistManagement.Bogie> bogies = tcm.createBogies();
-        int originalSize = bogies.size();
+    void testRegex_TrainIDDigitLengthValidation() {
+        assertFalse(tcm.isValidTrainID("TRN-123"));   // too short
+        assertFalse(tcm.isValidTrainID("TRN-12345")); // too long
+    }
 
-        tcm.totalSeats(bogies);
-        assertEquals(originalSize, bogies.size());
+    @Test
+    void testRegex_CargoCodeUppercaseValidation() {
+        assertFalse(tcm.isValidCargoCode("PET-aa")); // lowercase not allowed
+    }
+
+    @Test
+    void testRegex_EmptyInputHandling() {
+        assertFalse(tcm.isValidTrainID(""));
+        assertFalse(tcm.isValidCargoCode(""));
+    }
+
+    @Test
+    void testRegex_ExactPatternMatch() {
+        assertFalse(tcm.isValidTrainID("TRN-1234X")); // extra characters
+        assertFalse(tcm.isValidCargoCode("PET-ABC")); // extra characters
     }
 }

@@ -41,20 +41,23 @@ public class TrainConsistManagement {
                 .collect(Collectors.toList());
     }
 
+    // UC10: Compute total seats
+    public int totalSeats(List<Bogie> bogies) {
+        return bogies.stream()
+                .map(b -> b.capacity)
+                .reduce(0, Integer::sum);
+    }
+
     static void main(String[] args) {
         TrainConsistManagement tcm = new TrainConsistManagement();
         List<Bogie> bogies = tcm.createBogies();
 
-        System.out.println("UC9 - Group Bogies by Type Using Streams");
-        System.out.println("----------------------------------------");
+        System.out.println("UC10 - Count Total Seats in Train Using reduce()");
+        System.out.println("-----------------------------------------------");
         System.out.println("All Bogies:");
         bogies.forEach(System.out::println);
 
-        Map<String, List<Bogie>> grouped = tcm.groupBogiesByType(bogies);
-        System.out.println("\nGrouped Bogies:");
-        grouped.forEach((type, list) -> {
-            System.out.println(type + ":");
-            list.forEach(b -> System.out.println("  " + b));
-        });
+        int totalSeats = tcm.totalSeats(bogies);
+        System.out.println("\nTotal Seats in Train: " + totalSeats);
     }
 }

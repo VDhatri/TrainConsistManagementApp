@@ -2,7 +2,6 @@ import java.util.*;
 
 public class TrainConsistManagement {
 
-    // Static inner class Bogie
     static class Bogie {
         private String name;
         private int capacity;
@@ -39,7 +38,6 @@ public class TrainConsistManagement {
             System.out.println(b);
         }
 
-        // Sort bogies by capacity
         bogies.sort(Comparator.comparingInt(Bogie::getCapacity));
 
         System.out.println("\nAfter Sorting by Capacity:");

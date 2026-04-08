@@ -7,61 +7,47 @@ public class TrainConsistManagementTest {
 
     TrainConsistManagement tcm = new TrainConsistManagement();
 
-    // --- UC13: Loop vs Stream Tests ---
 
     @Test
-    void testLoopFilteringLogic() {
-        List<TrainConsistManagement.PassengerBogie> bogies = List.of(
-                new TrainConsistManagement.PassengerBogie("Sleeper", 72),
-                new TrainConsistManagement.PassengerBogie("AC Chair", 50),
-                new TrainConsistManagement.PassengerBogie("First Class", 80)
+    void testException_ValidCapacityCreation() throws TrainConsistManagement.InvalidCapacityException {
+        TrainConsistManagement.PassengerBogie bogie = new TrainConsistManagement.PassengerBogie("Sleeper", 72);
+        assertEquals("Sleeper", bogie.type);
+        assertEquals(72, bogie.capacity);
+    }
+
+    @Test
+    void testException_NegativeCapacityThrowsException() {
+        Exception exception = assertThrows(
+                TrainConsistManagement.InvalidCapacityException.class,
+                () -> new TrainConsistManagement.PassengerBogie("AC Chair", -10)
         );
-        List<TrainConsistManagement.PassengerBogie> filtered = tcm.filterBogiesLoop(bogies, 60);
-        assertEquals(2, filtered.size());
-        assertTrue(filtered.stream().allMatch(b -> b.capacity > 60));
+        assertEquals("Capacity must be greater than zero", exception.getMessage());
     }
 
     @Test
-    void testStreamFilteringLogic() {
-        List<TrainConsistManagement.PassengerBogie> bogies = List.of(
-                new TrainConsistManagement.PassengerBogie("Sleeper", 72),
-                new TrainConsistManagement.PassengerBogie("AC Chair", 50),
-                new TrainConsistManagement.PassengerBogie("First Class", 80)
+    void testException_ZeroCapacityThrowsException() {
+        Exception exception = assertThrows(
+                TrainConsistManagement.InvalidCapacityException.class,
+                () -> new TrainConsistManagement.PassengerBogie("First Class", 0)
         );
-        List<TrainConsistManagement.PassengerBogie> filtered = tcm.filterBogiesStream(bogies, 60);
-        assertEquals(2, filtered.size());
-        assertTrue(filtered.stream().allMatch(b -> b.capacity > 60));
+        assertEquals("Capacity must be greater than zero", exception.getMessage());
     }
 
     @Test
-    void testLoopAndStreamResultsMatch() {
-        List<TrainConsistManagement.PassengerBogie> bogies = List.of(
-                new TrainConsistManagement.PassengerBogie("Sleeper", 72),
-                new TrainConsistManagement.PassengerBogie("AC Chair", 50),
-                new TrainConsistManagement.PassengerBogie("First Class", 80)
-        );
-        List<TrainConsistManagement.PassengerBogie> loopFiltered = tcm.filterBogiesLoop(bogies, 60);
-        List<TrainConsistManagement.PassengerBogie> streamFiltered = tcm.filterBogiesStream(bogies, 60);
-        assertEquals(loopFiltered.size(), streamFiltered.size());
+    void testException_ObjectIntegrityAfterCreation() throws TrainConsistManagement.InvalidCapacityException {
+        TrainConsistManagement.PassengerBogie bogie = new TrainConsistManagement.PassengerBogie("Sleeper", 50);
+        assertEquals("Sleeper", bogie.type);
+        assertEquals(50, bogie.capacity);
     }
 
     @Test
-    void testExecutionTimeMeasurement() {
-        long elapsed = tcm.measureExecutionTime(() -> {
-            tcm.filterBogiesLoop(new ArrayList<>(), 60);
-        });
-        assertTrue(elapsed > 0);
-    }
+    void testException_MultipleValidBogiesCreation() throws TrainConsistManagement.InvalidCapacityException {
+        TrainConsistManagement.PassengerBogie b1 = new TrainConsistManagement.PassengerBogie("Sleeper", 72);
+        TrainConsistManagement.PassengerBogie b2 = new TrainConsistManagement.PassengerBogie("AC Chair", 80);
+        TrainConsistManagement.PassengerBogie b3 = new TrainConsistManagement.PassengerBogie("First Class", 100);
 
-    @Test
-    void testLargeDatasetProcessing() {
-        List<TrainConsistManagement.PassengerBogie> bogies = new ArrayList<>();
-        for (int i = 0; i < 10000; i++) {
-            bogies.add(new TrainConsistManagement.PassengerBogie("Sleeper", i % 100));
-        }
-        List<TrainConsistManagement.PassengerBogie> loopFiltered = tcm.filterBogiesLoop(bogies, 60);
-        List<TrainConsistManagement.PassengerBogie> streamFiltered = tcm.filterBogiesStream(bogies, 60);
-        assertEquals(loopFiltered.size(), streamFiltered.size());
-        assertTrue(loopFiltered.stream().allMatch(b -> b.capacity > 60));
+        assertEquals(72, b1.capacity);
+        assertEquals(80, b2.capacity);
+        assertEquals(100, b3.capacity);
     }
 }

@@ -6,44 +6,47 @@ public class TrainConsistManagementTest {
     TrainConsistManagement tcm = new TrainConsistManagement();
 
     @Test
-    void testCargo_SafeAssignment() {
-        TrainConsistManagement.GoodsBogie cylindricalBogie = new TrainConsistManagement.GoodsBogie("Cylindrical");
-        cylindricalBogie.assignCargo("Petroleum");
-        assertEquals("Petroleum", cylindricalBogie.cargo);
+    void testSort_BasicSorting() {
+        int[] arr = {72, 56, 24, 70, 60};
+        int[] expected = {24, 56, 60, 70, 72};
+
+        TrainConsistManagement.bubbleSortCapacities(arr);
+        assertArrayEquals(expected, arr);
     }
 
     @Test
-    void testCargo_UnsafeAssignmentHandled() {
-        TrainConsistManagement.GoodsBogie rectangularBogie = new TrainConsistManagement.GoodsBogie("Rectangular");
-        // Unsafe assignment should be handled internally, cargo should not be assigned
-        rectangularBogie.assignCargo("Petroleum");
-        assertNull(rectangularBogie.cargo);
+    void testSort_AlreadySortedArray() {
+        int[] arr = {24, 56, 60, 70, 72};
+        int[] expected = {24, 56, 60, 70, 72};
+
+        TrainConsistManagement.bubbleSortCapacities(arr);
+        assertArrayEquals(expected, arr);
     }
 
     @Test
-    void testCargo_ProgramContinuesAfterException() {
-        TrainConsistManagement.GoodsBogie b1 = new TrainConsistManagement.GoodsBogie("Rectangular");
-        TrainConsistManagement.GoodsBogie b2 = new TrainConsistManagement.GoodsBogie("Cylindrical");
+    void testSort_DuplicateValues() {
+        int[] arr = {72, 56, 56, 24};
+        int[] expected = {24, 56, 56, 72};
 
-        b1.assignCargo("Petroleum");   // unsafe, handled
-        b2.assignCargo("Petroleum");   // safe
-
-        // Program continues: other bogie assigned correctly
-        assertEquals("Petroleum", b2.cargo);
-        assertNull(b1.cargo);
+        TrainConsistManagement.bubbleSortCapacities(arr);
+        assertArrayEquals(expected, arr);
     }
 
     @Test
-    void testCargo_FinallyBlockExecution() {
-        TrainConsistManagement.GoodsBogie b = new TrainConsistManagement.GoodsBogie("Rectangular");
+    void testSort_SingleElementArray() {
+        int[] arr = {50};
+        int[] expected = {50};
 
-        // Use a flag to check finally output (simulate by capturing console in real scenario)
-        boolean finallyExecuted = false;
-        try {
-            b.assignCargo("Petroleum");  // unsafe
-        } finally {
-            finallyExecuted = true;
-        }
-        assertTrue(finallyExecuted);
+        TrainConsistManagement.bubbleSortCapacities(arr);
+        assertArrayEquals(expected, arr);
+    }
+
+    @Test
+    void testSort_AllEqualValues() {
+        int[] arr = {40, 40, 40};
+        int[] expected = {40, 40, 40};
+
+        TrainConsistManagement.bubbleSortCapacities(arr);
+        assertArrayEquals(expected, arr);
     }
 }

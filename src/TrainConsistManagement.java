@@ -41,7 +41,6 @@ public class TrainConsistManagement {
                 .collect(Collectors.toList());
     }
 
-    // UC10: Compute total seats
     public int totalSeats(List<Bogie> bogies) {
         return bogies.stream()
                 .map(b -> b.capacity)

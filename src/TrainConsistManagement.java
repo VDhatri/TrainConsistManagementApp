@@ -4,9 +4,8 @@ import java.util.stream.Collectors;
 
 public class TrainConsistManagement {
 
-    // Passenger bogie class
     public static class PassengerBogie {
-        String type;  // Sleeper, AC Chair, First Class
+        String type;  
         int capacity;
 
         public PassengerBogie(String type, int capacity) {
@@ -20,7 +19,6 @@ public class TrainConsistManagement {
         }
     }
 
-    // --- UC13: Loop-based filtering ---
     public List<PassengerBogie> filterBogiesLoop(List<PassengerBogie> bogies, int minCapacity) {
         List<PassengerBogie> result = new ArrayList<>();
         for (PassengerBogie b : bogies) {
@@ -31,26 +29,22 @@ public class TrainConsistManagement {
         return result;
     }
 
-    // --- UC13: Stream-based filtering ---
     public List<PassengerBogie> filterBogiesStream(List<PassengerBogie> bogies, int minCapacity) {
         return bogies.stream()
                 .filter(b -> b.capacity > minCapacity)
                 .collect(Collectors.toList());
     }
 
-    // --- UC13: Performance measurement utility ---
     public long measureExecutionTime(Runnable action) {
         long start = System.nanoTime();
         action.run();
         long end = System.nanoTime();
-        return end - start;  // elapsed time in nanoseconds
+        return end - start;  
     }
 
-    // --- Sample main to demonstrate UC13 ---
     public static void main(String[] args) {
         TrainConsistManagement tcm = new TrainConsistManagement();
 
-        // Sample passenger bogies
         List<PassengerBogie> bogies = List.of(
                 new PassengerBogie("Sleeper", 72),
                 new PassengerBogie("AC Chair", 50),

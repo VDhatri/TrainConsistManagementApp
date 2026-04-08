@@ -11,7 +11,7 @@ public class TrainConsistManagement {
     }
 
     public static class PassengerBogie {
-        String type;  // Sleeper, AC Chair, First Class
+        String type;  
         int capacity;
 
         public PassengerBogie(String type, int capacity) throws InvalidCapacityException {

@@ -2,29 +2,49 @@ import java.util.Arrays;
 
 public class TrainConsistManagement {
 
-    // --- UC18: Linear Search for Bogie ID ---
-    public static boolean searchBogieByID(String[] bogieIDs, String searchKey) {
-        for (String id : bogieIDs) {
-            if (id.equals(searchKey)) {
-                return true; // Match found
+    public static boolean binarySearchBogieID(String[] bogieIDs, String searchKey) {
+        if (bogieIDs == null || bogieIDs.length == 0) {
+            return false;
+        }
+
+        Arrays.sort(bogieIDs);
+
+        int low = 0;
+        int high = bogieIDs.length - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            int cmp = bogieIDs[mid].compareTo(searchKey);
+
+            if (cmp == 0) {
+                return true;
+            } else if (cmp < 0) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
             }
         }
-        return false; // Not found
+
+        return false;
     }
 
     public static void main(String[] args) {
-        String[] bogieIDs = {"BG101","BG205","BG309","BG412","BG550"};
+        String[] bogieIDs = {"BG309","BG101","BG550","BG205","BG412"};
 
-        System.out.println("UC18 - Linear Search for Bogie ID");
+        System.out.println("UC19 - Binary Search for Bogie ID");
         System.out.println("---------------------------------");
-        System.out.println("Bogie IDs: " + Arrays.toString(bogieIDs));
+        System.out.println("Bogie IDs (unsorted): " + Arrays.toString(bogieIDs));
 
-        String searchKey = "BG309";
-        boolean found = searchBogieByID(bogieIDs, searchKey);
+        String searchKey = "BG205";
+        boolean found = binarySearchBogieID(bogieIDs, searchKey);
         System.out.println("Searching for " + searchKey + ": " + (found ? "Found" : "Not Found"));
 
         searchKey = "BG999";
-        found = searchBogieByID(bogieIDs, searchKey);
+        found = binarySearchBogieID(bogieIDs, searchKey);
+        System.out.println("Searching for " + searchKey + ": " + (found ? "Found" : "Not Found"));
+
+        searchKey = "BG101";
+        found = binarySearchBogieID(bogieIDs, searchKey);
         System.out.println("Searching for " + searchKey + ": " + (found ? "Found" : "Not Found"));
     }
 }

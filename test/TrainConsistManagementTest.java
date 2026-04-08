@@ -4,33 +4,47 @@ import org.junit.jupiter.api.Test;
 public class TrainConsistManagementTest {
 
     @Test
-    void testSearch_BogieFound() {
+    void testBinarySearch_BogieFound() {
         String[] bogies = {"BG101","BG205","BG309","BG412","BG550"};
-        assertTrue(TrainConsistManagement.searchBogieByID(bogies, "BG309"));
+        assertTrue(TrainConsistManagement.binarySearchBogieID(bogies, "BG309"));
     }
 
     @Test
-    void testSearch_BogieNotFound() {
+    void testBinarySearch_BogieNotFound() {
         String[] bogies = {"BG101","BG205","BG309","BG412","BG550"};
-        assertFalse(TrainConsistManagement.searchBogieByID(bogies, "BG999"));
+        assertFalse(TrainConsistManagement.binarySearchBogieID(bogies, "BG999"));
     }
 
     @Test
-    void testSearch_FirstElementMatch() {
+    void testBinarySearch_FirstElementMatch() {
         String[] bogies = {"BG101","BG205","BG309","BG412","BG550"};
-        assertTrue(TrainConsistManagement.searchBogieByID(bogies, "BG101"));
+        assertTrue(TrainConsistManagement.binarySearchBogieID(bogies, "BG101"));
     }
 
     @Test
-    void testSearch_LastElementMatch() {
+    void testBinarySearch_LastElementMatch() {
         String[] bogies = {"BG101","BG205","BG309","BG412","BG550"};
-        assertTrue(TrainConsistManagement.searchBogieByID(bogies, "BG550"));
+        assertTrue(TrainConsistManagement.binarySearchBogieID(bogies, "BG550"));
     }
 
     @Test
-    void testSearch_SingleElementArray() {
+    void testBinarySearch_SingleElementArray() {
         String[] bogies = {"BG101"};
-        assertTrue(TrainConsistManagement.searchBogieByID(bogies, "BG101"));
-        assertFalse(TrainConsistManagement.searchBogieByID(bogies, "BG999"));
+        assertTrue(TrainConsistManagement.binarySearchBogieID(bogies, "BG101"));
+        assertFalse(TrainConsistManagement.binarySearchBogieID(bogies, "BG999"));
+    }
+
+    @Test
+    void testBinarySearch_EmptyArray() {
+        String[] bogies = {};
+        assertFalse(TrainConsistManagement.binarySearchBogieID(bogies, "BG101"));
+    }
+
+    @Test
+    void testBinarySearch_UnsortedInputHandled() {
+        String[] bogies = {"BG309","BG101","BG550","BG205","BG412"};
+        assertTrue(TrainConsistManagement.binarySearchBogieID(bogies, "BG205"));
+        assertTrue(TrainConsistManagement.binarySearchBogieID(bogies, "BG101"));
+        assertFalse(TrainConsistManagement.binarySearchBogieID(bogies, "BG999"));
     }
 }

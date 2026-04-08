@@ -4,62 +4,57 @@ import java.util.stream.Collectors;
 
 public class TrainConsistManagement {
 
-    public static class InvalidCapacityException extends Exception {
-        public InvalidCapacityException(String message) {
+    // --- UC15: Custom Runtime Exception ---
+    public static class CargoSafetyException extends RuntimeException {
+        public CargoSafetyException(String message) {
             super(message);
         }
     }
 
-    public static class PassengerBogie {
-        String type;  // Sleeper, AC Chair, First Class
-        int capacity;
+    // Goods bogie with safe cargo assignment
+    public static class GoodsBogie {
+        String type;   // Rectangular, Cylindrical
+        String cargo;  // Petroleum, Coal, Grain
 
-        public PassengerBogie(String type, int capacity) throws InvalidCapacityException {
-            if (capacity <= 0) {
-                throw new InvalidCapacityException("Capacity must be greater than zero");
-            }
+        public GoodsBogie(String type) {
             this.type = type;
-            this.capacity = capacity;
+        }
+
+        // Assign cargo safely using try-catch-finally
+        public void assignCargo(String cargo) {
+            try {
+                if (type.equals("Rectangular") && cargo.equals("Petroleum")) {
+                    throw new CargoSafetyException("Unsafe cargo assignment: Petroleum cannot be assigned to Rectangular bogie");
+                }
+                this.cargo = cargo;
+                System.out.println("Cargo assigned successfully: " + cargo + " -> " + type);
+            } catch (CargoSafetyException e) {
+                System.out.println("Exception caught: " + e.getMessage());
+            } finally {
+                System.out.println("Cargo assignment validation complete for bogie: " + type);
+            }
         }
 
         @Override
         public String toString() {
-            return type + " -> " + capacity + " seats";
+            return type + " -> " + (cargo != null ? cargo : "No cargo assigned");
         }
     }
 
-    public List<PassengerBogie> filterBogiesLoop(List<PassengerBogie> bogies, int minCapacity) {
-        List<PassengerBogie> result = new ArrayList<>();
-        for (PassengerBogie b : bogies) {
-            if (b.capacity > minCapacity) {
-                result.add(b);
-            }
-        }
-        return result;
-    }
-
-    public List<PassengerBogie> filterBogiesStream(List<PassengerBogie> bogies, int minCapacity) {
-        return bogies.stream()
-                .filter(b -> b.capacity > minCapacity)
-                .collect(Collectors.toList());
-    }
-
-    public long measureExecutionTime(Runnable action) {
-        long start = System.nanoTime();
-        action.run();
-        long end = System.nanoTime();
-        return end - start;
-    }
-
+    // Sample main to demonstrate UC15
     public static void main(String[] args) {
-        TrainConsistManagement tcm = new TrainConsistManagement();
-        try {
-            PassengerBogie validBogie = new PassengerBogie("Sleeper", 72);
-            System.out.println("Created bogie: " + validBogie);
+        GoodsBogie cylindricalBogie = new GoodsBogie("Cylindrical");
+        GoodsBogie rectangularBogie = new GoodsBogie("Rectangular");
 
-            PassengerBogie invalidBogie = new PassengerBogie("AC Chair", 0);
-        } catch (InvalidCapacityException e) {
-            System.out.println("Exception: " + e.getMessage());
-        }
+        System.out.println("UC15 - Safe Cargo Assignment Demo");
+        System.out.println("---------------------------------");
+
+        cylindricalBogie.assignCargo("Petroleum");  // safe assignment
+        rectangularBogie.assignCargo("Petroleum");  // unsafe assignment
+
+        // Continue program
+        System.out.println("Program continues safely...");
+        System.out.println(cylindricalBogie);
+        System.out.println(rectangularBogie);
     }
 }

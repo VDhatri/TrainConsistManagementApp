@@ -2,7 +2,6 @@ import java.util.Arrays;
 
 public class TrainConsistManagement {
 
-    // --- UC17: Sort Bogie Names using Arrays.sort() ---
     public static void sortBogieNames(String[] bogieNames) {
         Arrays.sort(bogieNames);
     }

@@ -2,9 +2,9 @@ import java.util.Arrays;
 
 public class TrainConsistManagement {
 
-    public static boolean binarySearchBogieID(String[] bogieIDs, String searchKey) {
+    public static boolean searchBogieWithValidation(String[] bogieIDs, String searchKey) {
         if (bogieIDs == null || bogieIDs.length == 0) {
-            return false;
+            throw new IllegalStateException("Cannot search: No bogies available in the train consist.");
         }
 
         Arrays.sort(bogieIDs);
@@ -29,22 +29,19 @@ public class TrainConsistManagement {
     }
 
     public static void main(String[] args) {
-        String[] bogieIDs = {"BG309","BG101","BG550","BG205","BG412"};
+        System.out.println("UC20 - Exception Handling During Search Operations");
+        System.out.println("-------------------------------------------------");
 
-        System.out.println("UC19 - Binary Search for Bogie ID");
-        System.out.println("---------------------------------");
-        System.out.println("Bogie IDs (unsorted): " + Arrays.toString(bogieIDs));
+        String[] emptyBogieArray = {};
+        String[] bogieIDs = {"BG101","BG205","BG309"};
 
-        String searchKey = "BG205";
-        boolean found = binarySearchBogieID(bogieIDs, searchKey);
-        System.out.println("Searching for " + searchKey + ": " + (found ? "Found" : "Not Found"));
+        try {
+            searchBogieWithValidation(emptyBogieArray, "BG101");
+        } catch (IllegalStateException e) {
+            System.out.println("Expected exception: " + e.getMessage());
+        }
 
-        searchKey = "BG999";
-        found = binarySearchBogieID(bogieIDs, searchKey);
-        System.out.println("Searching for " + searchKey + ": " + (found ? "Found" : "Not Found"));
-
-        searchKey = "BG101";
-        found = binarySearchBogieID(bogieIDs, searchKey);
-        System.out.println("Searching for " + searchKey + ": " + (found ? "Found" : "Not Found"));
+        System.out.println("Searching BG205: " + searchBogieWithValidation(bogieIDs, "BG205"));
+        System.out.println("Searching BG999: " + searchBogieWithValidation(bogieIDs, "BG999"));
     }
 }

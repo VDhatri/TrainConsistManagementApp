@@ -2,10 +2,9 @@ import java.util.List;
 
 public class TrainConsistManagement {
 
-    // Static class for Goods Bogies
     public static class GoodsBogie {
-        String type;   // e.g., Cylindrical, Rectangular
-        String cargo;  // e.g., Petroleum, Coal, Grain
+        String type;   
+        String cargo;  
 
         public GoodsBogie(String type, String cargo) {
             this.type = type;
@@ -18,7 +17,6 @@ public class TrainConsistManagement {
         }
     }
 
-    // UC12: Safety Compliance Check
     public boolean isTrainSafetyCompliant(List<GoodsBogie> goodsBogies) {
         return goodsBogies.stream()
                 .allMatch(b -> !b.type.equals("Cylindrical") || b.cargo.equals("Petroleum"));

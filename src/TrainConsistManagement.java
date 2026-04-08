@@ -2,14 +2,13 @@ import java.util.Arrays;
 
 public class TrainConsistManagement {
 
-    // --- UC18: Linear Search for Bogie ID ---
     public static boolean searchBogieByID(String[] bogieIDs, String searchKey) {
         for (String id : bogieIDs) {
             if (id.equals(searchKey)) {
-                return true; // Match found
+                return true; 
             }
         }
-        return false; // Not found
+        return false; 
     }
 
     public static void main(String[] args) {

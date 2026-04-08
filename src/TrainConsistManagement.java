@@ -3,17 +3,15 @@ import java.util.regex.Matcher;
 
 public class TrainConsistManagement {
 
-    // UC11: Validate Train ID
     public boolean isValidTrainID(String trainID) {
-        String trainPattern = "TRN-\\d{4}"; // Format: TRN-1234
+        String trainPattern = "TRN-\\d{4}"; 
         Pattern pattern = Pattern.compile(trainPattern);
         Matcher matcher = pattern.matcher(trainID);
         return matcher.matches();
     }
 
-    // UC11: Validate Cargo Code
     public boolean isValidCargoCode(String cargoCode) {
-        String cargoPattern = "PET-[A-Z]{2}"; // Format: PET-AB
+        String cargoPattern = "PET-[A-Z]{2}"; 
         Pattern pattern = Pattern.compile(cargoPattern);
         Matcher matcher = pattern.matcher(cargoCode);
         return matcher.matches();
@@ -22,7 +20,6 @@ public class TrainConsistManagement {
     public static void main(String[] args) {
         TrainConsistManagement tcm = new TrainConsistManagement();
 
-        // Sample inputs
         String trainID1 = "TRN-1234";
         String trainID2 = "TRN12A";
         String cargo1 = "PET-AB";
